@@ -63,6 +63,8 @@ COPY ./superset-ui /app/superset-ui
 
 RUN cd /app/superset-ui && yarn && yarn build
 RUN npm install -g npm-cli-adduser
+RUN npm install -g npm-cli-login
+
 RUN npm install -g sinopia2 && npm set registry http://localhost:4873/
 COPY ./config.yaml /root/.config/sinopia/config.yaml
 RUN nohup bash -c "sinopia &" && sleep 2 \
@@ -74,6 +76,7 @@ RUN nohup bash -c "sinopia &" && sleep 2 \
     && cd /app/superset-ui/plugins/plugin-chart-stylo-pie-table && npm publish \
     && /frontend-mem-nag.sh \
     && cd /app/superset-frontend \
+    && npm-cli-login -u username -p password -e foo@foo.com -r http://localhost:4873 \
     && npm ci
 
 # Next, copy in the rest and let webpack do its thing
