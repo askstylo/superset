@@ -165,7 +165,15 @@ RUN wget https://download-installer.cdn.mozilla.net/pub/firefox/releases/${FIREF
 # Cache everything for dev purposes...
 RUN cd /app \
     && pip install --no-cache -r requirements/docker.txt \
-    && pip install --no-cache -r requirements/requirements-local.txt || true
+    && pip install --no-cache -r requirements/requirements-local.txt || true \
+    && pip install authlib \
+    && pip install psycopg2 \
+    && pip install lunarcalendar tqdm \
+    && pip install pystan==2.19.1.1 \
+    && pip install prophet \
+    && pip install pybigquery \
+    && pip install redis \
+    && pip install flask_oauthlib gevent
 USER superset
 
 
