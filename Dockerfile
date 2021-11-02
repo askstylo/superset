@@ -110,6 +110,8 @@ RUN mkdir -p ${PYTHONPATH} \
             libpq-dev \
         && rm -rf /var/lib/apt/lists/*
 
+COPY ../superset_config.py ${PYTHONPATH}
+
 COPY --from=superset-py /usr/local/lib/python3.7/site-packages/ /usr/local/lib/python3.7/site-packages/
 # Copying site-packages doesn't move the CLIs, so let's copy them one by one
 COPY --from=superset-py /usr/local/bin/gunicorn /usr/local/bin/celery /usr/local/bin/flask /usr/bin/
