@@ -83,7 +83,6 @@ import { PivotTableChartPlugin as PivotTableChartPluginV2 } from '@superset-ui/p
 import FilterBoxChartPlugin from '../FilterBox/FilterBoxChartPlugin';
 import TimeTableChartPlugin from '../TimeTable/TimeTableChartPlugin';
 import { StyloPieTableChartPlugin } from '@superset-ui/plugin-chart-stylo-pie-table';
-
 import { ConciseCardChartPlugin } from '@superset-ui/plugin-chart-concise-card';
 
 export default class MainPreset extends Preset {
