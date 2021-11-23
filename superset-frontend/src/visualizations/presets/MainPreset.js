@@ -170,7 +170,7 @@ export default class MainPreset extends Preset {
         new TimeGrainFilterPlugin().configure({ key: 'filter_timegrain' }),
         new EchartsTreeChartPlugin().configure({ key: 'tree_chart' }),
 	      new StyloPieTableChartPlugin().configure({ key: 'stylo-pie-table' }),
-	      new ConciseCardChartPlugin().configure({ key: 'concise-card-plugin' }),
+        new ConciseCardChartPlugin().configure({key: 'stylo-concise-card'}),
         ...experimentalplugins,
       ],
     });
