@@ -59,7 +59,7 @@ RUN mkdir -p /app/superset/assets
 COPY ./docker/frontend-mem-nag.sh /
 COPY ./superset-frontend/package* /app/superset-frontend/
 COPY ./superset-frontend /app/superset-frontend
-RUN git submodule update --init && cd ./superset-ui && git checkout master
+RUN cd ./superset-ui && git submodule update --init && git checkout concise_card_fixes
 COPY ./superset-ui /app/superset-ui
 
 RUN cd /app/superset-ui && yarn && yarn build
