@@ -65,6 +65,7 @@ COPY ./superset-ui /app/superset-ui
 RUN cd /app/superset-ui && yarn && yarn build
 RUN npm install -g npm-cli-adduser
 RUN npm install -g sinopia2 && npm set registry http://localhost:4873/
+RUN npm cache verify
 COPY ./config.yaml /root/.config/sinopia/config.yaml
 RUN nohup bash -c "sinopia &" && sleep 2 \
     && (npm-cli-adduser -u username -p password -e foo@foo.com -r http://localhost:4873 || true) \
@@ -76,7 +77,8 @@ RUN nohup bash -c "sinopia &" && sleep 2 \
     && cd /app/superset-ui/plugins/plugin-chart-concise-card && npm publish \
     && /frontend-mem-nag.sh \
     && cd /app/superset-frontend \
-    && npm ci
+    && rm -rf package-lock.json node_modules \
+    && npm install --force
 
 # Next, copy in the rest and let webpack do its thing
 # This seems to be the most expensive step
