@@ -77,7 +77,7 @@ RUN nohup bash -c "sinopia &" && sleep 2 \
     && cd /app/superset-ui/plugins/plugin-chart-concise-card && npm publish \
     && /frontend-mem-nag.sh \
     && cd /app/superset-frontend \
-    && rm -rf package-lock.json node_modules \
+    && npm install babel-preset-es2015 --legacy-peer-deps \
     && npm install --legacy-peer-deps
 
 # Next, copy in the rest and let webpack do its thing
