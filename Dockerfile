@@ -78,8 +78,7 @@ RUN nohup bash -c "sinopia &" && sleep 2 \
     && /frontend-mem-nag.sh \
     && cd /app/superset-frontend \
     && rm -rf package-lock.json node_modules \
-    && npm install babel-preset-es2015 \
-    && npm install --save --legacy-peer-deps
+    && npm install --legacy-peer-deps
 
 # Next, copy in the rest and let webpack do its thing
 # This seems to be the most expensive step
