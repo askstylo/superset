@@ -63,10 +63,10 @@ COPY ./superset-ui /app/superset-ui
 
 RUN cd /app/superset-ui && yarn && yarn build
 RUN npm install -g npm-cli-adduser
-RUN npm install -g sinopia2 && npm set registry http://localhost:4873/
+RUN npm install -g verdaccio && npm set registry http://localhost:4873/
 
-COPY ./config.yaml /root/.config/sinopia/config.yaml
-RUN nohup bash -c "sinopia &" && sleep 2 \
+COPY ./config.yaml /root/.config/verdaccio/config.yaml
+RUN nohup bash -c "verdaccio &" && sleep 2 \
     && (npm-cli-adduser -u username -p password -e foo@foo.com -r http://localhost:4873 || true) \
     && cd /app/superset-ui/packages/superset-ui-core && npm publish \
     && cd /app/superset-ui/packages/superset-ui-chart-controls && npm publish \
