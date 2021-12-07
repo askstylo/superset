@@ -77,7 +77,7 @@ RUN nohup bash -c "sinopia &" && sleep 2 \
     && /frontend-mem-nag.sh \
     && cd /app/superset-frontend \
     && npm install babel-preset-es2015 \
-    && npm config set legacy-peer-deps true
+    && npm config set legacy-peer-deps true \
     && npm install
 
 # Next, copy in the rest and let webpack do its thing
