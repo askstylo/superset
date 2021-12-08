@@ -320,7 +320,7 @@ const config = {
           'thread-loader',
           babelLoader,
           {
-            loader: 'ts-loader',
+            loader: 'awesome-typescript-loader',
             options: {
               // transpile only in happyPack mode
               // type checking is done via fork-ts-checker-webpack-plugin
