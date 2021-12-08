@@ -33,7 +33,7 @@
     "sourceMap": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
-    "target": "esnext",
+    "target": "es2018",
     "types": [
       "@emotion/react/types/css-prop",
       "jest",
