@@ -47,7 +47,7 @@ RUN cd /app \
 ######################################################################
 FROM node:14 AS superset-node
 
-ARG NPM_VER=6
+ARG NPM_VER=7
 RUN npm install -g npm@${NPM_VER}
 
 ARG NPM_BUILD_CMD="build"
@@ -76,7 +76,6 @@ RUN nohup bash -c "sinopia &" && sleep 2 \
     && cd /app/superset-ui/plugins/plugin-chart-concise-card && npm publish \
     && /frontend-mem-nag.sh \
     && cd /app/superset-frontend \
-    && npm install babel-preset-es2015 \
     && npm config set legacy-peer-deps true \
     && npm install
 
