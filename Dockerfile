@@ -47,7 +47,7 @@ RUN cd /app \
 ######################################################################
 FROM node:14 AS superset-node
 
-ARG NPM_VER=6
+ARG NPM_VER=7
 RUN npm install -g npm@${NPM_VER}
 
 ARG NPM_BUILD_CMD="build"
