@@ -332,7 +332,7 @@ const config = {
               compilerOptions: {
                 esModuleInterop: false,
                 importHelpers: false,
-                module: 'ES2018',
+                module: 'esnext',
                 target: 'ES2018',
               },
             },
