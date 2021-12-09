@@ -185,7 +185,7 @@ const babelLoader = {
     // disable gzip compression for cache files
     // faster when there are millions of small files
     cacheCompression: false,
-    plugins: ['emotion'],
+    plugins: ['emotion', '@babel/plugin-proposal-optional-chaining'],
     presets: [
       [
         '@emotion/babel-preset-css-prop',
@@ -320,7 +320,7 @@ const config = {
           'thread-loader',
           babelLoader,
           {
-            loader: 'awesome-typescript-loader',
+            loader: 'ts-loader',
             options: {
               // transpile only in happyPack mode
               // type checking is done via fork-ts-checker-webpack-plugin
