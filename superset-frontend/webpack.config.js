@@ -332,8 +332,8 @@ const config = {
               compilerOptions: {
                 esModuleInterop: false,
                 importHelpers: false,
-                module: 'ES2020',
-                target: 'ES2020',
+                module: 'ES2019',
+                target: 'ES2019',
               },
             },
           },
