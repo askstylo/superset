@@ -47,7 +47,7 @@ RUN cd /app \
 ######################################################################
 FROM node:14 AS superset-node
 
-ARG NPM_VER=7
+ARG NPM_VER=6
 RUN npm install -g npm@${NPM_VER}
 
 ARG NPM_BUILD_CMD="build"
@@ -79,6 +79,7 @@ RUN nohup bash -c "sinopia &" && sleep 2 \
     && npm config set legacy-peer-deps true \
     && npm install --legacy-peer-deps
 
+RUN npm install -g npm@7
 # Next, copy in the rest and let webpack do its thing
 # This seems to be the most expensive step
 RUN cd /app/superset-frontend \
