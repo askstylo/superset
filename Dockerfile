@@ -79,6 +79,7 @@ RUN nohup bash -c "sinopia &" && sleep 2 \
     && npm config set legacy-peer-deps true \
     && npm install --legacy-peer-deps
 
+npm config set registry https://registry.npmjs.org/
 RUN npm install -g npm@7
 # Next, copy in the rest and let webpack do its thing
 # This seems to be the most expensive step
