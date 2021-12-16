@@ -380,6 +380,9 @@ const config = {
             options: {
               sourceMap: isDevMode,
               javascriptEnabled: true,
+              modifyVars: {
+                'root-entry-name': 'default'
+              }
             },
           },
         ],
