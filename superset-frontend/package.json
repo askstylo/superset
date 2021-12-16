@@ -27,7 +27,8 @@
     "check-translation": "prettier --check ../superset/translations/**/LC_MESSAGES/*.json",
     "clean-translation": "prettier --write ../superset/translations/**/LC_MESSAGES/*.json",
     "storybook": "cross-env NODE_ENV=development BABEL_ENV=development start-storybook -s ./images -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "preinstall": "npx npm-force-resolutions"
   },
   "repository": {
     "type": "git",
@@ -60,8 +61,12 @@
     "npm": "^7.5.4"
   },
   "homepage": "https://superset.apache.org/",
+  "resolutions": {
+    "acorn": "8.0.1"
+  },
   "dependencies": {
     "@ant-design/icons": "^4.2.2",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.16.5",
     "@babel/runtime-corejs3": "^7.12.5",
     "@data-ui/sparkline": "^0.0.84",
     "@emotion/babel-preset-css-prop": "^11.2.0",
@@ -92,6 +97,7 @@
     "@superset-ui/legacy-preset-chart-big-number": "^0.18.1",
     "@superset-ui/legacy-preset-chart-deckgl": "^0.4.12",
     "@superset-ui/legacy-preset-chart-nvd3": "^0.18.1000",
+    "@superset-ui/plugin-chart-concise-card": "0.0.0",
     "@superset-ui/plugin-chart-echarts": "^0.18.1000",
     "@superset-ui/plugin-chart-pivot-table": "^0.18.0",
     "@superset-ui/plugin-chart-stylo-pie-table": "^0.18.1000",

@@ -185,7 +185,7 @@ const babelLoader = {
     // disable gzip compression for cache files
     // faster when there are millions of small files
     cacheCompression: false,
-    plugins: ['emotion'],
+    plugins: ['emotion', '@babel/plugin-proposal-optional-chaining', '@babel/plugin-proposal-nullish-coalescing-operator'],
     presets: [
       [
         '@emotion/babel-preset-css-prop',
@@ -333,7 +333,7 @@ const config = {
                 esModuleInterop: false,
                 importHelpers: false,
                 module: 'esnext',
-                target: 'esnext',
+                target: 'ES2018',
               },
             },
           },
@@ -380,6 +380,9 @@ const config = {
             options: {
               sourceMap: isDevMode,
               javascriptEnabled: true,
+              modifyVars: {
+                'root-entry-name': 'default'
+              }
             },
           },
         ],

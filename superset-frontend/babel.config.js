@@ -61,7 +61,7 @@ module.exports = {
             loose: true,
             shippedProposals: true,
             modules: 'commonjs',
-            targets: { node: 'current' },
+            targets: { node: 'esnext' },
           },
         ],
         ['@emotion/babel-preset-css-prop'],
