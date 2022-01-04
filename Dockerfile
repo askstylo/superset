@@ -61,7 +61,7 @@ COPY ./superset-frontend/package* /app/superset-frontend/
 COPY ./superset-frontend /app/superset-frontend
 COPY ./superset-ui /app/superset-ui
 
-RUN cd /app/superset-ui && npm set registry https://registry.npmjs.org/ && yarn && yarn build
+RUN cd /app/superset-ui && yarn config set registry https://registry.npmjs.org/ && yarn && yarn build
 RUN npm install -g npm-cli-adduser
 RUN npm install -g sinopia2 && npm set registry http://localhost:4873/
 COPY ./config.yaml /root/.config/sinopia/config.yaml
