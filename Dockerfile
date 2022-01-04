@@ -61,12 +61,12 @@ COPY ./superset-frontend/package* /app/superset-frontend/
 COPY ./superset-frontend /app/superset-frontend
 COPY ./superset-ui /app/superset-ui
 
-RUN cd /app/superset-ui && yarn config set registry https://registry.npmjs.org/ && yarn && yarn build
+RUN npm install -g sinopia2
+RUN cd /app/superset-ui && sinopia && yarn && yarn build
 RUN npm install -g npm-cli-adduser
-RUN npm install -g sinopia2 && npm set registry http://localhost:4873/
+RUN npm set registry http://localhost:4873/
 COPY ./config.yaml /root/.config/sinopia/config.yaml
-RUN nohup bash -c "sinopia &" && sleep 2 \
-    && (npm-cli-adduser -u username -p password -e foo@foo.com -r http://localhost:4873 || true) \
+RUN nohup bash -c (npm-cli-adduser -u username -p password -e foo@foo.com -r http://localhost:4873 || true) \
     && cd /app/superset-ui/packages/superset-ui-core && npm publish \
     && cd /app/superset-ui/packages/superset-ui-chart-controls && npm publish \
     && cd /app/superset-ui/plugins/legacy-preset-chart-nvd3 && npm publish \
