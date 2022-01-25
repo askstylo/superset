@@ -95,6 +95,60 @@ const TimeTableStyles = styled.div`
   th {
     z-index: 1; // to cover sparkline
   }
+  tr {
+    width: 656px;
+    height: 32px;
+  }
+
+  #bootstrap_overrides > td, tbody > tr > td, .table > tfoot > tr > td {
+    min-width: 4.3em;
+    border: 1px solid #E6E6E7;
+    vertical-align: middle;
+    font-family: Inter, serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 13px;
+    letter-spacing: -0.01em;
+    text-transform: capitalize;
+    font-feature-settings: 'tnum' on, 'lnum' on;
+    color: #535355;
+  }
+
+  tr {
+    border: 1px solid #E6E6E7;
+  }
+
+  #bootstrap_overrides > .table > thead > tr > th {
+    padding-right: 1.4em;
+    position: relative;
+    background: ${({theme: {colors}}) => colors.grayscale.light5};
+    text-align: left;
+    padding-left: 15px;
+    width: 178px;
+    height: 60px;
+    display: table-cell;
+    vertical-align: middle;
+    border: 1px solid #E6E6E7;
+    font-family: Inter, serif;
+    font-style: normal;
+    font-weight: 550;
+    font-size: 13px;
+    line-height: 12px;
+    letter-spacing: 0.02em;
+    text-transform: capitalize;
+    font-feature-settings: 'tnum' on, 'lnum' on;
+    color: #6C6C6E;
+  }
+
+  .table > tbody > tr:first-of-type > td,
+  .table > tbody > tr:first-of-type > th {
+    border-top: 1px;
+  }
+
+  th svg {
+    visibility: hidden;
+  }
 `;
 
 const TimeTable = ({
@@ -138,6 +192,7 @@ const TimeTable = ({
 
   const memoizedRows = useMemo(() => {
     const renderSparklineCell = (valueField, column, entries) => {
+      const fillColor = "#FF7A7A"
       let sparkData;
       if (column.timeRatio) {
         // Period ratio sparkline
@@ -164,6 +219,7 @@ const TimeTable = ({
           numberFormat={column.d3format}
           yAxisBounds={column.yAxisBounds}
           showYAxis={column.showYAxis}
+          fillColor={fillColor}
           renderTooltip={({ index }) => (
             <div>
               <strong>{formatNumber(column.d3format, sparkData[index])}</strong>
@@ -318,6 +374,7 @@ const TimeTable = ({
   return (
     <TimeTableStyles className={`time-table ${className}`} height={height}>
       <TableView
+        id={"bootstrap_overrides"}
         className="table-no-hover"
         columns={memoizedColumns}
         data={memoizedRows}
