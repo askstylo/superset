@@ -71,24 +71,35 @@ function getSortTypeByDataType(dataType: GenericDataType): DefaultSortTypes {
 function cellBar({
   value,
   valueRange,
-  colorPositiveNegative = false,
   alignPositiveNegative,
+  palette,
+  cellBarIndex
 }: {
   value: number;
   valueRange: ValueRange;
   colorPositiveNegative: boolean;
   alignPositiveNegative: boolean;
+  palette: string[];
+  cellBarIndex: number
+  
 }) {
   const [minValue, maxValue] = valueRange;
-  const r = colorPositiveNegative && value < 0 ? 150 : 0;
+  const colorNumber = cellBarIndex < 2 ? cellBarIndex : cellBarIndex % palette.length;
   if (alignPositiveNegative) {
     const perc = Math.abs(Math.round((value / maxValue) * 100));
     // The 0.01 to 0.001 is a workaround for what appears to be a
     // CSS rendering bug on flat, transparent colors
-    return (
-      `linear-gradient(to right, rgba(${r},0,0,0.2), rgba(${r},0,0,0.2) ${perc}%, ` +
-      `rgba(0,0,0,0.01) ${perc}%, rgba(0,0,0,0.001) 100%)`
-    );
+    if (value > 0) {
+      return (
+        `linear-gradient(to right, rgba(${palette[colorNumber]},0.2), rgba(${palette[colorNumber]},0.2) ${perc}%, ` +
+        `rgba(${palette[colorNumber]},0.01) ${perc}%, rgba(${palette[colorNumber]},0.001) 100%)`
+      );
+    } else {
+      return (
+        `linear-gradient(to left, rgba(236, 85, 64, 0.2), rgba(236, 85, 64, 0.2) ${perc}%, ` +
+        `rgba(236, 85, 64, 0.01) ${perc}%, rgba(236, 85, 64, 0.001) 100%)`
+      )
+    }
   }
   const posExtent = Math.abs(Math.max(maxValue, 0));
   const negExtent = Math.abs(Math.min(minValue, 0));
@@ -100,9 +111,9 @@ function cellBar({
   // The 0.01 to 0.001 is a workaround for what appears to be a
   // CSS rendering bug on flat, transparent colors
   return (
-    `linear-gradient(to right, rgba(0,0,0,0.01), rgba(0,0,0,0.001) ${perc1}%, ` +
-    `rgba(${r},0,0,0.2) ${perc1}%, rgba(${r},0,0,0.2) ${perc1 + perc2}%, ` +
-    `rgba(0,0,0,0.01) ${perc1 + perc2}%, rgba(0,0,0,0.001) 100%)`
+    `linear-gradient(to right, rgba(81, 59, 227, 0.15), rgba(81, 59, 227, 0.15) ${perc1}%, ` +
+    `rgba(81, 59, 227, 0.15) ${perc1}%, rgba(81, 59, 227, 0.15) ${perc1 + perc2}%, ` +
+    `rgba(81, 59, 227, 0.15) ${perc1 + perc2}%, rgba(81, 59, 227, 0.15) 100%)`
   );
 }
 
@@ -316,6 +327,7 @@ export default function TableChart<D extends DataRecord = DataRecord>(
 
   const getColumnConfigs = useCallback(
     (column: DataColumnMeta, i: number): ColumnWithLooseAccessor<D> => {
+      const palette = ["81, 59, 227", "141, 207, 255", "194, 153, 248", "61, 210, 195"]
       const { key, label, isNumeric, dataType, isMetric, config = {} } = column;
       const isFilter = !isNumeric && emitFilter;
       const columnWidth = Number.isNaN(Number(config.columnWidth))
@@ -398,6 +410,8 @@ export default function TableChart<D extends DataRecord = DataRecord>(
                       valueRange,
                       alignPositiveNegative,
                       colorPositiveNegative,
+                      palette: palette,
+                      cellBarIndex: Number(i)
                     })
                   : undefined),
             },
@@ -475,7 +489,7 @@ export default function TableChart<D extends DataRecord = DataRecord>(
   };
 
   return (
-    <Styles>
+      <Styles id={"bootstrap_overrides"}>
       <DataTable<D>
         columns={columns}
         data={data}
