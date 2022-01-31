@@ -27,9 +27,28 @@ export default styled.div`
     margin: 0;
   }
 
-  th,
-  td {
+  tr {
+    width: 656px;
+    height: 32px;
+  }
+
+  #bootstrap_overrides > td, tbody > tr > td, .table > tfoot > tr > td {
     min-width: 4.3em;
+    border: 1px solid #E6E6E7;
+    vertical-align: middle;
+    font-family: Inter, serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 13px;
+    letter-spacing: -0.01em;
+    text-transform: capitalize;
+    font-feature-settings: 'tnum' on, 'lnum' on;
+    color: #535355;
+  }
+
+  tr {
+    border: 1px solid #E6E6E7;
   }
 
   thead > tr > th {
@@ -37,19 +56,37 @@ export default styled.div`
     position: relative;
     background: ${({ theme: { colors } }) => colors.grayscale.light5};
     text-align: left;
+    padding-left: 15px;
+    width: 178px;
+    height: 60px;
+    display: table-cell;
+    vertical-align: middle;
+    border: 1px solid #E6E6E7;
+    font-family: Inter, serif;
+    font-style: normal;
+    font-weight: 550;
+    font-size: 13px;
+    line-height: 12px;
+    letter-spacing: 0.02em;
+    text-transform: capitalize;
+    font-feature-settings: 'tnum' on, 'lnum' on;
+    color: #6C6C6E;
   }
   th svg {
     color: ${({ theme: { colors } }) => colors.grayscale.light2};
     position: relative;
     vertical-align: middle;
     margin: 0 ${({ theme: { gridUnit } }) => gridUnit}px;
+    visibility: hidden;
   }
+
   th.is-sorted svg {
     color: ${({ theme: { colors } }) => colors.grayscale.base};
   }
+
   .table > tbody > tr:first-of-type > td,
   .table > tbody > tr:first-of-type > th {
-    border-top: 0;
+    border-top: 1px;
   }
 
   .dt-controls {
