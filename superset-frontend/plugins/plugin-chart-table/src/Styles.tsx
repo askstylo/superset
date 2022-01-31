@@ -54,7 +54,7 @@ export default styled.div`
   thead > tr > th {
     padding-right: 1.4em;
     position: relative;
-    background: ${({theme: {colors}}) => colors.grayscale.light5};
+    background: ${({ theme: { colors } }) => colors.grayscale.light5};
     text-align: left;
     padding-left: 15px;
     width: 178px;
@@ -76,7 +76,7 @@ export default styled.div`
     color: ${({ theme: { colors } }) => colors.grayscale.light2};
     position: relative;
     vertical-align: middle;
-    margin: 0 ${({theme: {gridUnit}}) => gridUnit}px;
+    margin: 0 ${({ theme: { gridUnit } }) => gridUnit}px;
     visibility: hidden;
   }
 
