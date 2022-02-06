@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    div {
+      font-family: Inter,sans-serif ;
+      font-style: normal;
+      /* or 30px */
+
+      letter-spacing: -0.01em;
+    }
+  </style>
+</head>
+<body>
+  <div id="main_card"
+    style="
+      background: #F7F6FC;
+      width: 595px;
+      height: 2727px;
+      margin: 0 auto;
+
+    "
+  >
+    <img
+      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAhCAYAAAC803lsAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAANoSURBVHgBvVdNVhpBEK5qwGzdJk8M3kB3Ec0LniCDF5CcIHAC8ASaE0guIHMDyUvU7PAGovhelmEb56fS1c1MhpmeHn6S1Apmqru/qq/q6xqENcxp3G/Cr/IJCJy611ufYQ1DWNGc+tMuIgwAqKYeEI0pDI7c7ztjWMEErGDHB09tRBrFINgQa1gqj5z9hzasYEtlxGn8qKHnX8ifDZsfEfVhI+i4w50p/G0gzuGkgcRUwOZCC5akqhAIFyT65R4QfDS8nhLBudoIoWc8AOH08lu1B+sAmVHBWdg1vL6jwG9GEWvf4GqubqJDCNww9Du27OQWqypIzx+ZQBDQOVX8ubS7w5djqpSOELCf8UdwUJSumN688zIZYSrEc/mCFxv8pxCCM7itfol8TTrCQUiwZ8YDc6iaA6ILEi9M6SWAIQT+h5iKtI4sQVXaly2m5vhw0pNcGhdSCG33uhpTYdQRSaFK/9tHlUlNlbfHNBqAaN+Dp5PoAVq1gVsQRNO92brTUcoO8soDKNCRdPqd+mMLUXQNQcquwyPeXwgvcPI2Jll4MQimzauMikBo/NBtHkxGzpv7Gv93b7b7XMgS4hiSQc5AKPAacYbvhD/1hcAH3txwptYRpE3ZLW0DojGVoON+3XajR0590mV/qASnSeWNi5UpEs/+WU63gPGQJG356V9I1LLtKxHnqWSMgQswFZFaa+uUAsk3KmvhhhvBXt6Fpgu6Mspdi6Jnml2MympTSXXdP5fiQpwDERe0UTv0WqA+S0XmFRgiSkZro4rCsOPevlY6YVNTo6WoMiorUThMzhM2qrirUEYKFh2SP94bg0lQFQPhdM21aAqx6iov6MqoW7BIwKmCbh5OznNGCSBBTa0jUpYxxIHJKauShV01lVdCz72tfooeWEHw9SF9/+hIgahBKKMrvtAMF99i10fcNfwgr1NkDbSS80R0oSV90zOKEjg9zzQyGNiXJWAGQp0BBltmnnDq97sCXvy8vHn1oLNQMFrKq8CkI7mj4rLzhAZloTc1zywMRIORE5hX6uZeaAmVtGWRqXCvtzuWoxb7nLBdaEU6IgfWVjRarg1EgbFTld2YJ/cNScWCH1lLf/uuoiP/BIgCowRQnBXpyDK20kc4T1xKc2T6o2emb53/as39yTvWEljTfgObC4672EENmQAAAABJRU5ErkJggg=="
+      alt="logo"
+      style="
+      position: relative;
+      left: 233px;
+      top: 42px;
+      "
+    />
+    <h1 id="stylo_header"
+        style="
+          color: #513BE3;
+          position: relative;
+          left: 280px;
+          bottom: 20px;
+        "
+    >Stylo</h1>
+    <div id="suggest_header_card" style="
+      position: relative;
+      width: 549px;
+      height: 116px;
+      left: 23px;
+      bottom: 20px;
+      background: #FFFFFF;
+      border-radius: 12px;
+    ">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAyCAYAAAAayliMAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAVtSURBVHgB7VrdUttGFD5Hkp1Qkta8gfIEkLtOBlP5ujMF06QzuYp5gpAnwHmCkCcArnrRguGi1ziFML0LPEHVJ4jLP5Z2T89KFjEC62cl0+lMv5nEO9qVdr/d878AjAlnv9YXTrfqn08368swRhgwLpg0zf/X0JDTMEaMj8A94X8C/zb+8wSspM7jzXqrYnjdieYfLuRE/9LaqD4UM32P3oMGqOPUToRwxInZnVrq9kaNw1EdbP5a3LvGA1wDvYYOCV2oxZ+T3CWgGQNp+avm/shNGClCXt/sMj+XAGxJld2Lzrc23AOGF89z964u/Z2k8SMJTL3sut6V0bhPEvHF+75oTL1MPvlEJb6LBIwR5yDWbiz+p4PDtHestAGKxOefnUblgdwFkokfVDt4Af4rApwhAjt6jgg9BOoi+DtJukQSXMLsiw++DSXgpDPrIOAKEDgZhjMRWJ1c3NuBElCIgNrxU5Jt3t3X18/4+A2U2xLwEMnoEcoaSrTBoBkgdK4nRljv98w3SSYyC7QJDCvc4EnXBGxPLO59GPUOi6JdqYoVnrU1mLywidYmcLY19ylaPBK1J3/cf5v13dPOMz4Nq8OkbUWi/7f5VPcktEKJk6251WjxJshWnsUrPGoeHA5bt8o3ogOayH0C4e6Zn4KXc+78iG8p01yTEppfP9/bhpzQOAHz3aDhFlm8gjoJRFoNFmLQCmggF4GLjmN/MZWyDSWgD5aKc1j+cebkl1kHciIXAQJ/ftB0Hy1+3IASMNVk5WWTqtpo4Hze93MSCO04EmTyklnB8n8E4YcdyAlLeVFm8V28wwB/I26f2WLUwk4qlYBhiENWZm5hLd73JTyBG30GkTvBUmAhITuj2+DATZnJ5s2voR3QKBkmVHsChGra8b5z8F8TYTv+XLDc0W/PuhZbgTYvyRnu5LimJ4VeJqUDH3x2aIFFv+XMVGZXeeg78ecoOab6/uAva7IZmMJM5pDJHoZRJtlQIlh4pmXQIjfep6Jh/mmMejenHwhln8hwoERExoFFNLdu5SLAuxQFaraOzb4LyrfQwLdwhDpeT/y4ud9lUe0Gk5mo5Tnj8KVsQWhhXJ0cIXcowUFcpC9O0VNQu896NdgIPc+em8DwKRgmrkEBSBDRKWp7dq1w2rs0l9SvCoXPNme1ROm4U19g2W+pdhVoATShRUCZNuU/VJsQl3XKLSZhGNUSrFcX949AE9q10TCKRBdULA+VXKegqn4U+hLX63uFQvJCSb2qnRpcfgy/JJ5ydpYpLZRUVbm0bUguGz7fL+TxMxEIEnguOkkfjx6/+L093KeukSAWaGWFd+U9Ga68BddRCPMmektZE/1UEbquPhAsoEmv4v04sEj5Qd1bZUMMvu/kKWMmEojXKj1fNO8Y1gvnhu3JB8JO+6fy6FHzeVdWM28t1sq6+NRynyF7KjqEFJx1ZkdG5MNlTKUjAxKJdaORBE6kWGAFzVxo5QCPr1XnHEgBESXqyy0SYCmxepubgDDMbUOKaV+IjYyFVl4YaSlzHBGJ6kNvpX8pEj30SAJBsg3wBrKja1rQThskPGhFpcUkDPKApbRxqeX1rECU7sQPHz+kjWMdcDhFhLJQmABFaSAnOWedenpwRzgTvEWBFy+MwgQ4sHvPCrcQhAaULhpBQK4MQ8EQIkIpZxkrm/dYnG5lVspK8U+NHeK2f2wuFb0XiFCaMKrkRJD4U7VJUOPxC84bbvapgnCNE3gn6Q4hL8rTJlDV5vquqp2qmj+XZZYsy3d9sGyDjHeDcjwnLntPoESUZoUUVKITOSDOmXcFVYIdokjur7wGlIxS/1bi+lqWVLE2tDIU6sQ6L/5p2p2vDv4BowTpOpB9YAwAAAAASUVORK5CYII="
+           alt="light bulb"
+           style="
+             position: relative;
+             left: 41px;
+             top: 33px;
+           "
+      />
+      <h2 id="suggestions_header" style="
+          font-size: 29px;
+          font-weight: 600;
+          position: absolute;
+          left: 110px;
+          bottom: 15px;
+        "
+      >Weekly Support Suggestions</h2>
+    </div>
+    <div id="recommended_tags_card">
+      <div id="recomended_tags_header">
+        <h1>Recommended Tags</h1>
+      </div>
+      <ul>
+        <li>Category
+          <ul>
+            <li>Tag</li>
+            <li>Tag</li>
+            <li>Tag</li>
+            <li>Tag</li>
+          </ul>29px
+        </li>
+      </ul>
+      <button>Approve</button>
+      <button>Reject</button>
+    </div>
+
+  </div>
+</body>
+</html>
