@@ -32,9 +32,11 @@ export default styled.div`
     height: 32px;
   }
 
-  #bootstrap_overrides > td, tbody > tr > td, .table > tfoot > tr > td {
+  #bootstrap_overrides > td,
+  tbody > tr > td,
+  .table > tfoot > tr > td {
     min-width: 4.3em;
-    border: 1px solid #E6E6E7;
+    border: 1px solid #e6e6e7;
     vertical-align: middle;
     font-family: Inter, serif;
     font-style: normal;
@@ -48,7 +50,7 @@ export default styled.div`
   }
 
   tr {
-    border: 1px solid #E6E6E7;
+    border: 1px solid #e6e6e7;
   }
 
   thead > tr > th {
@@ -61,7 +63,7 @@ export default styled.div`
     height: 60px;
     display: table-cell;
     vertical-align: middle;
-    border: 1px solid #E6E6E7;
+    border: 1px solid #e6e6e7;
     font-family: Inter, serif;
     font-style: normal;
     font-weight: 550;
@@ -70,7 +72,7 @@ export default styled.div`
     letter-spacing: 0.02em;
     text-transform: capitalize;
     font-feature-settings: 'tnum' on, 'lnum' on;
-    color: #6C6C6E;
+    color: #6c6c6e;
   }
   th svg {
     color: ${({ theme: { colors } }) => colors.grayscale.light2};

@@ -38,7 +38,7 @@ interface Props {
   width: number;
   yAxisBounds: Array<number>;
   data: Array<number>;
-  fillColor: string
+  fillColor: string;
 }
 
 interface TooltipProps {
@@ -113,7 +113,7 @@ class SparklineCell extends React.Component<Props, {}> {
       yAxisBounds = [undefined, undefined],
       showYAxis = false,
       renderTooltip = () => <div />,
-      fillColor = "#513BE3"
+      fillColor = '#513BE3',
     } = this.props;
 
     const yScale: Yscale = {};
@@ -178,7 +178,7 @@ class SparklineCell extends React.Component<Props, {}> {
           >
             {showYAxis && this.renderHorizontalReferenceLine(min, minLabel)}
             {showYAxis && this.renderHorizontalReferenceLine(max, maxLabel)}
-            <LineSeries showArea={true} fill={fillColor} showLine={false}/>
+            <LineSeries showArea fill={fillColor} showLine={false} />
             {tooltipData && (
               <VerticalReferenceLine
                 reference={tooltipData.index}

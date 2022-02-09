@@ -100,9 +100,11 @@ const TimeTableStyles = styled.div`
     height: 32px;
   }
 
-  #bootstrap_overrides > td, tbody > tr > td, .table > tfoot > tr > td {
+  #bootstrap_overrides > td,
+  tbody > tr > td,
+  .table > tfoot > tr > td {
     min-width: 4.3em;
-    border: 1px solid #E6E6E7;
+    border: 1px solid #e6e6e7;
     vertical-align: middle;
     font-family: Inter, serif;
     font-style: normal;
@@ -116,20 +118,20 @@ const TimeTableStyles = styled.div`
   }
 
   tr {
-    border: 1px solid #E6E6E7;
+    border: 1px solid #e6e6e7;
   }
 
   #bootstrap_overrides > .table > thead > tr > th {
     padding-right: 1.4em;
     position: relative;
-    background: ${({theme: {colors}}) => colors.grayscale.light5};
+    background: ${({ theme: { colors } }) => colors.grayscale.light5};
     text-align: left;
     padding-left: 15px;
     width: 178px;
     height: 60px;
     display: table-cell;
     vertical-align: middle;
-    border: 1px solid #E6E6E7;
+    border: 1px solid #e6e6e7;
     font-family: Inter, serif;
     font-style: normal;
     font-weight: 550;
@@ -138,7 +140,7 @@ const TimeTableStyles = styled.div`
     letter-spacing: 0.02em;
     text-transform: capitalize;
     font-feature-settings: 'tnum' on, 'lnum' on;
-    color: #6C6C6E;
+    color: #6c6c6e;
   }
 
   .table > tbody > tr:first-of-type > td,
@@ -192,7 +194,7 @@ const TimeTable = ({
 
   const memoizedRows = useMemo(() => {
     const renderSparklineCell = (valueField, column, entries) => {
-      const fillColor = "#FF7A7A"
+      const fillColor = '#FF7A7A';
       let sparkData;
       if (column.timeRatio) {
         // Period ratio sparkline
@@ -374,7 +376,7 @@ const TimeTable = ({
   return (
     <TimeTableStyles className={`time-table ${className}`} height={height}>
       <TableView
-        id={"bootstrap_overrides"}
+        id="bootstrap_overrides"
         className="table-no-hover"
         columns={memoizedColumns}
         data={memoizedRows}
