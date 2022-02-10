@@ -64,10 +64,10 @@ const buildQuery: BuildQuery<TableChartFormData> = (
     formDataCopy = {
       ...formData,
       groupby: [DrillDown.getColumn(ownState.drilldown, groupByLabels)],
-      filters: [...formData.filters || [], ...ownState.drilldown.filters],
+      filters: [...(formData.filters || []), ...ownState.drilldown.filters],
     };
   }
-  
+
   // never include time in raw records mode
   if (queryMode === QueryMode.raw) {
     formDataCopy.include_time = false;
@@ -117,10 +117,6 @@ const buildQuery: BuildQuery<TableChartFormData> = (
         (ownState.currentPage ?? 0) * (ownState.pageSize ?? 0);
     }
 
-    if (formDataCopy.drillDown) {
-      baseQueryObject.filters = formDataCopy.filters;
-    }
-
     let queryObject = {
       ...baseQueryObject,
       orderby,
@@ -128,6 +124,10 @@ const buildQuery: BuildQuery<TableChartFormData> = (
       post_processing: postProcessing,
       ...moreProps,
     };
+
+    if (formDataCopy.drillDown) {
+      queryObject.filters = formDataCopy.filters;
+    }
 
     if (
       formData.server_pagination &&

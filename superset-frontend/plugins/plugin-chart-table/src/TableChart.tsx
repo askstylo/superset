@@ -500,11 +500,11 @@ export default function TableChart<D extends DataRecord = DataRecord>(
   const rowDrillDown = (data: D) => {
     if (drillDown && ownState?.drilldown) {
       const drilldown = DrillDown.drillDown(ownState.drilldown, data);
-      
+
       setDataMask({
         extraFormData: { filters: DrillDown.getFilters(drilldown, []) },
         filterState: { value: drilldown.hierarchy },
-        ownState: { drilldown }
+        ownState: { drilldown },
       });
     }
   };

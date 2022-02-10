@@ -236,7 +236,13 @@ export default function DataTable<D extends object>({
             prepareRow(row);
             const { key: rowKey, ...rowProps } = row.getRowProps();
             return (
-              <tr key={rowKey || row.id} {...rowProps} onClick={() => { rowClick?rowClick(row.original):null }}>
+              <tr
+                key={rowKey || row.id}
+                {...rowProps}
+                onClick={() => {
+                  if (rowClick) rowClick(row.original);
+                }}
+              >
                 {row.cells.map(cell =>
                   cell.render('Cell', { key: cell.column.id }),
                 )}
