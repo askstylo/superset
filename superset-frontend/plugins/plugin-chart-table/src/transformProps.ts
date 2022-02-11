@@ -240,7 +240,7 @@ const transformProps = (
   const columnColorFormatters =
     getColorFormatters(conditionalFormatting, data) ?? [];
 
-  const { ownState } = chartProps.ownState;
+  const { ownState } = chartProps;
 
   return {
     height,
