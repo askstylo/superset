@@ -56,15 +56,14 @@ const buildQuery: BuildQuery<TableChartFormData> = (
   const sortByMetric = ensureIsArray(formData.timeseries_limit_metric)[0];
   let formDataCopy = formData;
 
-  if (formData.drillDown && formData.groupby) {
-    const groupByLabels = formData.groupby.map(x => x.toString());
-    const ownState = options?.ownState || {};
-    ownState.drilldown ||= DrillDown.fromHierarchy(groupByLabels);
+  if (formData.drillDown) {
+    const groupByLabels = formData.groupby?.map(x => x.toString()) ?? [];
+    const drilldown = options?.ownState?.drilldown;
 
     formDataCopy = {
       ...formData,
-      groupby: [DrillDown.getColumn(ownState.drilldown, groupByLabels)],
-      filters: [...(formData.filters || []), ...ownState.drilldown.filters],
+      groupby: [DrillDown.getColumn(drilldown, groupByLabels)],
+      filters: [...(formData.filters || []), ...drilldown.filters],
     };
   }
 
@@ -200,7 +199,14 @@ export const cachedBuildQuery = (): BuildQuery<TableChartFormData> => {
       { ...formData },
       {
         extras: { cachedChanges },
-        ownState: options?.ownState ?? {},
+        ownState: {
+          ...options?.ownState,
+          drilldown:
+            options?.ownState?.drilldown ??
+            (formData.drillDown && formData.groupby
+              ? DrillDown.fromHierarchy(formData.groupby.map(x => x.toString()))
+              : undefined),
+        },
         hooks: {
           ...options?.hooks,
           setDataMask: () => {},

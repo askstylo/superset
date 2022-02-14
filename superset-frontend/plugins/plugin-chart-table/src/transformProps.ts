@@ -19,6 +19,7 @@
 import memoizeOne from 'memoize-one';
 import {
   DataRecord,
+  DrillDown,
   extractTimegrain,
   GenericDataType,
   getMetricLabel,
@@ -240,7 +241,16 @@ const transformProps = (
   const columnColorFormatters =
     getColorFormatters(conditionalFormatting, data) ?? [];
 
-  const { ownState } = chartProps;
+  const ownState = {
+    ...(chartProps.ownState.drilldown
+      ? {}
+      : {
+          drilldown: DrillDown.fromHierarchy(
+            formData.groupby?.map(x => x.toString()) ?? [],
+          ),
+        }),
+    ...chartProps.ownState,
+  };
 
   return {
     height,
