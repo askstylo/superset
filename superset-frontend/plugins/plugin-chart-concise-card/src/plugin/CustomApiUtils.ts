@@ -22,8 +22,6 @@ import {
   SupersetClient,
 } from '@superset-ui/core';
 
-const supersetClient = SupersetClient.getInstance();
-
 export const CATEGORY_SUBJECT = 'category';
 export const TAG_SUBJECT = 'tag';
 export const OPERATOR_ID_EQUALS = 'EQUALS';
@@ -106,5 +104,5 @@ export function runCustomQuery(
 
   const payload = buildReqestPayload(customFormData);
   const querySettings = createQuerySettings(payload);
-  return supersetClient.post(querySettings);
+  return SupersetClient.post(querySettings);
 }

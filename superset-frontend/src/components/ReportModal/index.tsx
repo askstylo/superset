@@ -25,18 +25,21 @@ import React, {
   FunctionComponent,
 } from 'react';
 import { t, SupersetTheme } from '@superset-ui/core';
+import { getClientErrorObject } from 'src/utils/getClientErrorObject';
 import { bindActionCreators } from 'redux';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { addReport, editReport } from 'src/reports/actions/reports';
 import { AlertObject } from 'src/views/CRUD/alert/types';
 
+import Alert from 'src/components/Alert';
 import TimezoneSelector from 'src/components/TimezoneSelector';
 import LabeledErrorBoundInput from 'src/components/Form/LabeledErrorBoundInput';
 import Icons from 'src/components/Icons';
 import withToasts from 'src/components/MessageToasts/withToasts';
 import { CronError } from 'src/components/CronPicker';
-import { RadioChangeEvent } from 'src/common/components';
+import { RadioChangeEvent } from 'src/components';
 import {
+  antDErrorAlertStyles,
   StyledModal,
   StyledTopSection,
   StyledBottomSection,
@@ -72,6 +75,7 @@ export interface ReportObject {
   working_timeout: number;
   creation_method: string;
   force_screenshot: boolean;
+  error: string;
 }
 
 interface ChartObject {
@@ -88,11 +92,10 @@ interface ChartObject {
 }
 
 interface ReportProps {
-  addDangerToast: (msg: string) => void;
-  addSuccessToast: (msg: string) => void;
   addReport: (report?: ReportObject) => {};
   onHide: () => {};
   onReportAdd: (report?: ReportObject) => {};
+  addDangerToast: (msg: string) => void;
   show: boolean;
   userId: number;
   userEmail: string;
@@ -111,6 +114,7 @@ enum ActionType {
   inputChange,
   fetched,
   reset,
+  error,
 }
 
 type ReportActionType =
@@ -124,6 +128,10 @@ type ReportActionType =
     }
   | {
       type: ActionType.reset;
+    }
+  | {
+      type: ActionType.error;
+      payload: { name: string[] };
     };
 
 const TEXT_BASED_VISUALIZATION_TYPES = [
@@ -138,6 +146,10 @@ const NOTIFICATION_FORMATS = {
   PNG: 'PNG',
   CSV: 'CSV',
 };
+
+const defaultErrorMsg = t(
+  'We were unable to create your report. Please try again.',
+);
 
 const reportReducer = (
   state: Partial<ReportObject> | null,
@@ -161,6 +173,11 @@ const reportReducer = (
       };
     case ActionType.reset:
       return { ...initialState };
+    case ActionType.error:
+      return {
+        ...state,
+        error: action.payload?.name[0] || defaultErrorMsg,
+      };
     default:
       return state;
   }
@@ -181,11 +198,10 @@ const ReportModal: FunctionComponent<ReportProps> = ({
   const [currentReport, setCurrentReport] = useReducer<
     Reducer<Partial<ReportObject> | null, ReportActionType>
   >(reportReducer, null);
-  const onChange = useCallback((type: any, payload: any) => {
+  const onReducerChange = useCallback((type: any, payload: any) => {
     setCurrentReport({ type, payload });
   }, []);
-  const [error, setError] = useState<CronError>();
-  // const [isLoading, setLoading] = useState<boolean>(false);
+  const [cronError, setCronError] = useState<CronError>();
   const dispatch = useDispatch();
   // Report fetch logic
   const reports = useSelector<any, AlertObject>(state => state.reports);
@@ -205,9 +221,7 @@ const ReportModal: FunctionComponent<ReportProps> = ({
       });
     }
   }, [reports]);
-  const onClose = () => {
-    onHide();
-  };
+
   const onSave = async () => {
     // Create new Report
     const newReportValues: Partial<ReportObject> = {
@@ -235,15 +249,18 @@ const ReportModal: FunctionComponent<ReportProps> = ({
       await dispatch(
         editReport(currentReport?.id, newReportValues as ReportObject),
       );
+      onHide();
     } else {
-      await dispatch(addReport(newReportValues as ReportObject));
+      try {
+        await dispatch(addReport(newReportValues as ReportObject));
+        onHide();
+      } catch (e) {
+        const { message } = await getClientErrorObject(e);
+        onReducerChange(ActionType.error, message);
+      }
     }
 
-    if (onReportAdd) {
-      onReportAdd();
-    }
-
-    onClose();
+    if (onReportAdd) onReportAdd();
   };
 
   const wrappedTitle = (
@@ -257,7 +274,7 @@ const ReportModal: FunctionComponent<ReportProps> = ({
 
   const renderModalFooter = (
     <>
-      <StyledFooterButton key="back" onClick={onClose}>
+      <StyledFooterButton key="back" onClick={onHide}>
         {t('Cancel')}
       </StyledFooterButton>
       <StyledFooterButton
@@ -279,7 +296,7 @@ const ReportModal: FunctionComponent<ReportProps> = ({
       <div className="inline-container">
         <StyledRadioGroup
           onChange={(event: RadioChangeEvent) => {
-            onChange(ActionType.inputChange, {
+            onReducerChange(ActionType.inputChange, {
               name: 'report_format',
               value: event.target.value,
             });
@@ -302,10 +319,19 @@ const ReportModal: FunctionComponent<ReportProps> = ({
     </>
   );
 
+  const errorAlert = () => (
+    <Alert
+      type="error"
+      css={(theme: SupersetTheme) => antDErrorAlertStyles(theme)}
+      message={t('Report Creation Error')}
+      description={currentReport?.error}
+    />
+  );
+
   return (
     <StyledModal
       show={show}
-      onHide={onClose}
+      onHide={onHide}
       title={wrappedTitle}
       footer={renderModalFooter}
       width="432"
@@ -316,38 +342,33 @@ const ReportModal: FunctionComponent<ReportProps> = ({
           id="name"
           name="name"
           value={currentReport?.name || ''}
-          placeholder="Weekly Report"
+          placeholder={t('Weekly Report')}
           required
           validationMethods={{
             onChange: ({ target }: { target: HTMLInputElement }) =>
-              onChange(ActionType.inputChange, {
+              onReducerChange(ActionType.inputChange, {
                 name: target.name,
                 value: target.value,
               }),
           }}
-          errorMessage={
-            currentReport?.name === 'error' ? t('REPORT NAME ERROR') : ''
-          }
           label="Report Name"
           data-test="report-name-test"
         />
-
         <LabeledErrorBoundInput
           id="description"
           name="description"
           value={currentReport?.description || ''}
           validationMethods={{
             onChange: ({ target }: { target: HTMLInputElement }) =>
-              onChange(ActionType.inputChange, {
+              onReducerChange(ActionType.inputChange, {
                 name: target.name,
                 value: target.value,
               }),
           }}
-          errorMessage={
-            currentReport?.description === 'error' ? t('DESCRIPTION ERROR') : ''
-          }
-          label="Description"
-          placeholder="Include a description that will be sent with your report"
+          label={t('Description')}
+          placeholder={t(
+            'Include a description that will be sent with your report',
+          )}
           css={noBottomMargin}
           data-test="report-description-test"
         />
@@ -363,16 +384,16 @@ const ReportModal: FunctionComponent<ReportProps> = ({
 
         <StyledCronPicker
           clearButton={false}
-          value={currentReport?.crontab || '0 12 * * 1'}
+          value={t(currentReport?.crontab || '0 12 * * 1')}
           setValue={(newValue: string) => {
-            onChange(ActionType.inputChange, {
+            onReducerChange(ActionType.inputChange, {
               name: 'crontab',
               value: newValue,
             });
           }}
-          onError={setError}
+          onError={setCronError}
         />
-        <StyledCronError>{error}</StyledCronError>
+        <StyledCronError>{cronError}</StyledCronError>
         <div
           className="control-label"
           css={(theme: SupersetTheme) => TimezoneHeaderStyle(theme)}
@@ -390,6 +411,7 @@ const ReportModal: FunctionComponent<ReportProps> = ({
         />
         {isChart && renderMessageContentSection}
       </StyledBottomSection>
+      {currentReport?.error && errorAlert()}
     </StyledModal>
   );
 };

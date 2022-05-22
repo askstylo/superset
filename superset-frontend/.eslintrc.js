@@ -67,7 +67,7 @@ module.exports = {
       version: 'detect',
     },
   },
-  plugins: ['prettier', 'react', 'file-progress'],
+  plugins: ['prettier', 'react', 'file-progress', 'theme-colors'],
   overrides: [
     {
       files: ['*.ts', '*.tsx'],
@@ -159,6 +159,7 @@ module.exports = {
         '*.stories.jsx',
         'fixtures.*',
       ],
+      excludedFiles: 'cypress-base/cypress/**/*',
       plugins: ['jest', 'jest-dom', 'no-only-tests', 'testing-library'],
       env: {
         'jest/globals': true,
@@ -180,21 +181,29 @@ module.exports = {
         ],
         'no-only-tests/no-only-tests': 'error',
         'max-classes-per-file': 0,
-        '@typescript-eslint/no-non-null-assertion': 0,
-        // TODO: disabled temporarily, re-enable after monorepo
-        'jest/consistent-test-it': 'error',
-        'jest/expect-expect': 0,
-        'jest/no-test-prefixes': 0,
-        'jest/valid-expect-in-promise': 0,
-        'jest/valid-expect': 0,
-        'jest/valid-title': 0,
-        'jest-dom/prefer-to-have-attribute': 0,
-        'jest-dom/prefer-to-have-text-content': 0,
-        'jest-dom/prefer-to-have-style': 0,
+      },
+    },
+    {
+      files: [
+        '*.test.ts',
+        '*.test.tsx',
+        '*.test.js',
+        '*.test.jsx',
+        '*.stories.tsx',
+        '*.stories.jsx',
+        'fixtures.*',
+        'cypress-base/cypress/**/*',
+        'Stories.tsx',
+        'packages/superset-ui-core/src/style/index.tsx',
+      ],
+      rules: {
+        'theme-colors/no-literal-colors': 0,
+        'no-restricted-imports': 0,
       },
     },
   ],
   rules: {
+    'theme-colors/no-literal-colors': 1,
     camelcase: [
       'error',
       {

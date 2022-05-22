@@ -111,6 +111,7 @@ export default function transformProps(
     showLabelsThreshold,
     emitFilter,
     drillDown,
+    sliceId,
   }: EchartsPieFormData = {
     ...DEFAULT_LEGEND_FORM_DATA,
     ...DEFAULT_PIE_FORM_DATA,
@@ -183,7 +184,7 @@ export default function transformProps(
       value: datum[metricLabel],
       name,
       itemStyle: {
-        color: colorFn(name),
+        color: colorFn(name, sliceId),
         opacity: isFiltered
           ? OpacityEnum.SemiTransparent
           : OpacityEnum.NonTransparent,

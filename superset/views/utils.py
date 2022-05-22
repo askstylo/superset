@@ -47,7 +47,7 @@ from superset.models.core import Database
 from superset.models.dashboard import Dashboard
 from superset.models.slice import Slice
 from superset.models.sql_lab import Query
-from superset.typing import FormData
+from superset.superset_typing import FormData
 from superset.utils.core import TimeRangeEndpoint
 from superset.utils.decorators import stats_timing
 from superset.viz import BaseViz
@@ -81,6 +81,7 @@ def bootstrap_user_data(user: User, include_perms: bool = False) -> Dict[str, An
             "lastName": user.last_name,
             "userId": user.id,
             "isActive": user.is_active,
+            "isAnonymous": user.is_anonymous,
             "createdOn": user.created_on.isoformat(),
             "email": user.email,
         }
@@ -137,9 +138,11 @@ def loads_request_json(request_json_data: str) -> Dict[Any, Any]:
 
 
 def get_form_data(  # pylint: disable=too-many-locals
-    slice_id: Optional[int] = None, use_slice_data: bool = False
+    slice_id: Optional[int] = None,
+    use_slice_data: bool = False,
+    initial_form_data: Optional[Dict[str, Any]] = None,
 ) -> Tuple[Dict[str, Any], Optional[Slice]]:
-    form_data: Dict[str, Any] = {}
+    form_data: Dict[str, Any] = initial_form_data or {}
 
     if has_request_context():  # type: ignore
         # chart data API requests are JSON
@@ -284,6 +287,7 @@ def apply_display_max_row_limit(
     metadata.
 
     :param sql_results: The results of a sql query from sql_lab.get_sql_results
+    :param rows: The number of rows to apply a limit to
     :returns: The mutated sql_results structure
     """
 
@@ -475,7 +479,9 @@ def is_owner(obj: Union[Dashboard, Slice], user: User) -> bool:
     return obj and user in obj.owners
 
 
-def check_resource_permissions(check_perms: Callable[..., Any],) -> Callable[..., Any]:
+def check_resource_permissions(
+    check_perms: Callable[..., Any],
+) -> Callable[..., Any]:
     """
     A decorator for checking permissions on a request using the passed-in function.
     """

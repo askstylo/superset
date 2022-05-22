@@ -29,6 +29,7 @@ from flask_compress import Compress
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from superset.connectors.connector_registry import ConnectorRegistry
+from superset.constants import CHANGE_ME_SECRET_KEY
 from superset.extensions import (
     _event_logger,
     APP_DIR,
@@ -48,7 +49,7 @@ from superset.extensions import (
     talisman,
 )
 from superset.security import SupersetSecurityManager
-from superset.typing import FlaskResponse
+from superset.superset_typing import FlaskResponse
 from superset.utils.core import pessimistic_connection_handling
 from superset.utils.log import DBEventLogger, get_event_logger_from_cfg_value
 
@@ -66,7 +67,7 @@ class SupersetAppInitializer:  # pylint: disable=too-many-public-methods
         self.config = app.config
         self.manifest: Dict[Any, Any] = {}
 
-    @deprecated(details="use self.superset_app instead of self.flask_app")  # type: ignore   # pylint: disable=line-too-long,useless-suppression
+    @deprecated(details="use self.superset_app instead of self.flask_app")  # type: ignore
     @property
     def flask_app(self) -> SupersetApp:
         return self.superset_app
@@ -135,10 +136,15 @@ class SupersetAppInitializer:  # pylint: disable=too-many-public-methods
         from superset.dashboards.api import DashboardRestApi
         from superset.dashboards.filter_sets.api import FilterSetRestApi
         from superset.dashboards.filter_state.api import DashboardFilterStateRestApi
+        from superset.dashboards.permalink.api import DashboardPermalinkRestApi
         from superset.databases.api import DatabaseRestApi
         from superset.datasets.api import DatasetRestApi
         from superset.datasets.columns.api import DatasetColumnsRestApi
         from superset.datasets.metrics.api import DatasetMetricRestApi
+        from superset.embedded.view import EmbeddedView
+        from superset.explore.form_data.api import ExploreFormDataRestApi
+        from superset.explore.permalink.api import ExplorePermalinkRestApi
+        from superset.importexport.api import ImportExportRestApi
         from superset.queries.api import QueryRestApi
         from superset.queries.saved_queries.api import SavedQueryRestApi
         from superset.reports.api import ReportScheduleRestApi
@@ -192,6 +198,7 @@ class SupersetAppInitializer:  # pylint: disable=too-many-public-methods
             TabStateView,
         )
         from superset.views.tags import TagView
+        from superset.views.users.api import CurrentUserRestApi
 
         #
         # Setup API views
@@ -203,17 +210,22 @@ class SupersetAppInitializer:  # pylint: disable=too-many-public-methods
         appbuilder.add_api(ChartRestApi)
         appbuilder.add_api(ChartDataRestApi)
         appbuilder.add_api(CssTemplateRestApi)
+        appbuilder.add_api(CurrentUserRestApi)
+        appbuilder.add_api(DashboardFilterStateRestApi)
+        appbuilder.add_api(DashboardPermalinkRestApi)
         appbuilder.add_api(DashboardRestApi)
         appbuilder.add_api(DatabaseRestApi)
         appbuilder.add_api(DatasetRestApi)
         appbuilder.add_api(DatasetColumnsRestApi)
         appbuilder.add_api(DatasetMetricRestApi)
+        appbuilder.add_api(ExploreFormDataRestApi)
+        appbuilder.add_api(ExplorePermalinkRestApi)
+        appbuilder.add_api(FilterSetRestApi)
+        appbuilder.add_api(ImportExportRestApi)
         appbuilder.add_api(QueryRestApi)
-        appbuilder.add_api(SavedQueryRestApi)
         appbuilder.add_api(ReportScheduleRestApi)
         appbuilder.add_api(ReportExecutionLogRestApi)
-        appbuilder.add_api(FilterSetRestApi)
-        appbuilder.add_api(DashboardFilterStateRestApi)
+        appbuilder.add_api(SavedQueryRestApi)
         #
         # Setup regular views
         #
@@ -291,6 +303,7 @@ class SupersetAppInitializer:  # pylint: disable=too-many-public-methods
         appbuilder.add_view_no_menu(Dashboard)
         appbuilder.add_view_no_menu(DashboardModelViewAsync)
         appbuilder.add_view_no_menu(Datasource)
+        appbuilder.add_view_no_menu(EmbeddedView)
         appbuilder.add_view_no_menu(KV)
         appbuilder.add_view_no_menu(R)
         appbuilder.add_view_no_menu(SavedQueryView)
@@ -364,53 +377,6 @@ class SupersetAppInitializer:  # pylint: disable=too-many-public-methods
             category_icon="fa-table",
         )
         appbuilder.add_separator("Data")
-        appbuilder.add_link(
-            "Upload a CSV",
-            label=__("Upload a CSV"),
-            href="/csvtodatabaseview/form",
-            icon="fa-upload",
-            category="Data",
-            category_label=__("Data"),
-            category_icon="fa-wrench",
-            cond=lambda: bool(
-                self.config["CSV_EXTENSIONS"].intersection(
-                    self.config["ALLOWED_EXTENSIONS"]
-                )
-            ),
-        )
-        appbuilder.add_link(
-            "Upload a Columnar file",
-            label=__("Upload a Columnar File"),
-            href="/columnartodatabaseview/form",
-            icon="fa-upload",
-            category="Data",
-            category_label=__("Data"),
-            category_icon="fa-wrench",
-            cond=lambda: bool(
-                self.config["COLUMNAR_EXTENSIONS"].intersection(
-                    self.config["ALLOWED_EXTENSIONS"]
-                )
-            ),
-        )
-        try:
-            import xlrd  # pylint: disable=unused-import
-
-            appbuilder.add_link(
-                "Upload Excel",
-                label=__("Upload Excel"),
-                href="/exceltodatabaseview/form",
-                icon="fa-upload",
-                category="Data",
-                category_label=__("Data"),
-                category_icon="fa-wrench",
-                cond=lambda: bool(
-                    self.config["EXCEL_EXTENSIONS"].intersection(
-                        self.config["ALLOWED_EXTENSIONS"]
-                    )
-                ),
-            )
-        except ImportError:
-            pass
 
         appbuilder.add_api(LogRestApi)
         appbuilder.add_view(
@@ -572,12 +538,27 @@ class SupersetAppInitializer:  # pylint: disable=too-many-public-methods
 
         self.init_views()
 
+    def check_secret_key(self) -> None:
+        if self.config["SECRET_KEY"] == CHANGE_ME_SECRET_KEY:
+            top_banner = 80 * "-" + "\n" + 36 * " " + "WARNING\n" + 80 * "-"
+            bottom_banner = 80 * "-" + "\n" + 80 * "-"
+            logger.warning(top_banner)
+            logger.warning(
+                "A Default SECRET_KEY was detected, please use superset_config.py "
+                "to override it.\n"
+                "Use a strong complex alphanumeric string and use a tool to help"
+                " you generate \n"
+                "a sufficiently random sequence, ex: openssl rand -base64 42"
+            )
+            logger.warning(bottom_banner)
+
     def init_app(self) -> None:
         """
         Main entry point which will delegate to other methods in
         order to fully init the app
         """
         self.pre_init()
+        self.check_secret_key()
         # Configuration of logging must be done first to apply the formatter properly
         self.configure_logging()
         # Configuration of feature_flags must be done first to allow init features

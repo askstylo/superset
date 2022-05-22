@@ -29,7 +29,6 @@ import {
   addDangerToast,
   toastActions,
 } from 'src/components/MessageToasts/actions';
-import { updateDataMask } from 'src/dataMask/actions';
 import { Slice } from 'src/types/Chart';
 
 const FAVESTAR_BASE_URL = '/superset/favstar/slice';
@@ -141,6 +140,30 @@ export function sliceUpdated(slice: Slice) {
   return { type: SLICE_UPDATED, slice };
 }
 
+export const SET_TIME_FORMATTED_COLUMN = 'SET_TIME_FORMATTED_COLUMN';
+export function setTimeFormattedColumn(
+  datasourceId: string,
+  columnName: string,
+) {
+  return {
+    type: SET_TIME_FORMATTED_COLUMN,
+    datasourceId,
+    columnName,
+  };
+}
+
+export const UNSET_TIME_FORMATTED_COLUMN = 'UNSET_TIME_FORMATTED_COLUMN';
+export function unsetTimeFormattedColumn(
+  datasourceId: string,
+  columnIndex: number,
+) {
+  return {
+    type: UNSET_TIME_FORMATTED_COLUMN,
+    datasourceId,
+    columnIndex,
+  };
+}
+
 export const exploreActions = {
   ...toastActions,
   setDatasourceType,
@@ -156,7 +179,8 @@ export const exploreActions = {
   updateChartTitle,
   createNewSlice,
   sliceUpdated,
-  updateDataMask,
+  setTimeFormattedColumn,
+  unsetTimeFormattedColumn,
 };
 
 export type ExploreActions = typeof exploreActions;
