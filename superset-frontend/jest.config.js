@@ -18,7 +18,8 @@
  */
 
 module.exports = {
-  testRegex: '\\/(spec|src|plugins|packages)\\/.*(_spec|\\.test)\\.[jt]sx?$',
+  testRegex:
+    '\\/superset-frontend\\/(spec|src|plugins|packages)\\/.*(_spec|\\.test)\\.[jt]sx?$',
   moduleNameMapper: {
     '\\.(css|less|geojson)$': '<rootDir>/spec/__mocks__/mockExportObject.js',
     '\\.(gif|ttf|eot|png|jpg)$': '<rootDir>/spec/__mocks__/mockExportString.js',
@@ -29,10 +30,7 @@ module.exports = {
     '@superset-ui/(.*)$': '<rootDir>/node_modules/@superset-ui/$1/src',
   },
   testEnvironment: 'jsdom',
-  modulePathIgnorePatterns: [
-    '<rootDir>/temporary_superset_ui',
-    '<rootDir>/packages/generator-superset',
-  ],
+  modulePathIgnorePatterns: ['<rootDir>/packages/generator-superset'],
   setupFilesAfterEnv: ['<rootDir>/spec/helpers/setup.ts'],
   testURL: 'http://localhost',
   collectCoverageFrom: [
@@ -50,26 +48,9 @@ module.exports = {
     'dist/',
   ],
   coverageReporters: ['lcov', 'json-summary', 'html'],
-  transform: {
-    '^.+\\.jsx?$': 'babel-jest',
-    // ts-jest doesn't work with `--coverage`. @superset-ui/core should
-    // 100% coverage, so we use babel-jest in packages and plugins.
-    '(plugins|packages)\\/.+\\.tsx?$': 'babel-jest',
-    '(((?!(plugins|packages)).)*)\\/.+\\.tsx?$': 'ts-jest',
-  },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   snapshotSerializers: ['@emotion/jest/enzyme-serializer'],
   globals: {
-    'ts-jest': {
-      babelConfig: true,
-      // todo: duo to packages/**/test and plugins/**/test lack of type checking
-      // turning off checking in Jest.
-      // https://kulshekhar.github.io/ts-jest/docs/getting-started/options/isolatedModules
-      isolatedModules: true,
-      diagnostics: {
-        warnOnly: true,
-      },
-    },
     __DEV__: true,
     caches: true,
   },

@@ -16,12 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import React from 'react';
+import React, { useState, ReactNode, useLayoutEffect } from 'react';
 import { styled, Metric, SafeMarkdown } from '@superset-ui/core';
 import InfoTooltipWithTrigger from './InfoTooltipWithTrigger';
 import { ColumnTypeLabel } from './ColumnTypeLabel';
 import CertifiedIconWithTooltip from './CertifiedIconWithTooltip';
 import Tooltip from './Tooltip';
+import { getMetricTooltipNode } from './labelUtils';
 
 const FlexRowContainer = styled.div`
   align-items: center;
@@ -37,7 +38,6 @@ export interface MetricOptionProps {
   openInNewWindow?: boolean;
   showFormula?: boolean;
   showType?: boolean;
-  showTooltip?: boolean;
   url?: string;
   labelRef?: React.RefObject<any>;
 }
@@ -48,7 +48,6 @@ export function MetricOption({
   openInNewWindow = false,
   showFormula = true,
   showType = false,
-  showTooltip = true,
   url = '',
 }: MetricOptionProps) {
   const verbose = metric.verbose_name || metric.metric_name || metric.label;
@@ -62,6 +61,12 @@ export function MetricOption({
 
   const warningMarkdown = metric.warning_markdown || metric.warning_text;
 
+  const [tooltipText, setTooltipText] = useState<ReactNode>(metric.metric_name);
+
+  useLayoutEffect(() => {
+    setTooltipText(getMetricTooltipNode(metric, labelRef));
+  }, [labelRef, metric]);
+
   return (
     <FlexRowContainer className="metric-option">
       {showType && <ColumnTypeLabel type="expression" />}
@@ -72,30 +77,11 @@ export function MetricOption({
           details={metric.certification_details}
         />
       )}
-      {showTooltip ? (
-        <Tooltip
-          id="metric-name-tooltip"
-          title={verbose}
-          trigger={['hover']}
-          placement="top"
-        >
-          <span className="option-label metric-option-label" ref={labelRef}>
-            {link}
-          </span>
-        </Tooltip>
-      ) : (
+      <Tooltip id="metric-name-tooltip" title={tooltipText}>
         <span className="option-label metric-option-label" ref={labelRef}>
           {link}
         </span>
-      )}
-      {metric.description && (
-        <InfoTooltipWithTrigger
-          className="text-muted"
-          icon="info"
-          tooltip={metric.description}
-          label={`descr-${metric.metric_name}`}
-        />
-      )}
+      </Tooltip>
       {showFormula && (
         <InfoTooltipWithTrigger
           className="text-muted"

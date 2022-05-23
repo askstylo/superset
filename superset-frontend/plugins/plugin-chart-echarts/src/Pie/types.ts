@@ -64,7 +64,7 @@ export enum EchartsPieLabelType {
   KeyValuePercent = 'key_value_percent',
 }
 
-export interface EchartsPieChartProps extends ChartProps {
+export interface EchartsPieChartProps extends ChartProps<EchartsPieFormData> {
   formData: EchartsPieFormData;
   queriesData: ChartDataResponseResult[];
   ownState: OwnState;

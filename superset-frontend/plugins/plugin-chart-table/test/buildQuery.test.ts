@@ -23,6 +23,7 @@ import { TableChartFormData } from '../src/types';
 const basicFormData: TableChartFormData = {
   viz_type: 'table',
   datasource: '11__table',
+  drillDown: false,
 };
 
 describe('plugin-chart-table', () => {
